@@ -9,8 +9,6 @@
   align-items: center;
   flex-wrap: wrap;
 }
-
-/* Left */
 .footer-left h3 {
   margin: 0;
   cursor: pointer;
@@ -36,12 +34,10 @@
   color: #60a5fa;
 }
 
-/* Right */
 .footer-right {
   font-size: 14px;
 }
 
-/* 📱 Mobile */
 @media (max-width: 600px) {
   .footer {
     flex-direction: column;

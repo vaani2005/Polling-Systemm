@@ -4,7 +4,7 @@ const Vote = require("../models/Vote");
 const auth = require("../middleware/authMiddleware");
 const jwt = require("jsonwebtoken");
 
-// ✅ CREATE POLL
+// CREATE POLL
 router.post("/", auth, async (req, res) => {
   const { question, options } = req.body;
 
@@ -28,32 +28,6 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
-// router.get("/", async (req, res) => {
-//   try {
-//     const page = Math.max(parseInt(req.query.page) || 1, 1);
-//     const limit = parseInt(req.query.limit) || 5;
-
-//     const skip = (page - 1) * limit;
-
-//     const total = await Poll.countDocuments();
-
-//     const polls = await Poll.find()
-//       .sort({ createdAt: -1 })
-//       .skip(skip)
-//       .limit(limit)
-//       .lean();
-
-//     res.json({
-//       polls,
-//       page,
-//       totalPages: Math.ceil(total / limit) || 1,
-//       total,
-//     });
-//   } catch (err) {
-//     res.status(500).json({ msg: "Error fetching polls" });
-//   }
-// });
-
 router.get("/", async (req, res) => {
   try {
     const page = Math.max(parseInt(req.query.page) || 1, 1);
@@ -61,16 +35,29 @@ router.get("/", async (req, res) => {
     const skip = (page - 1) * limit;
 
     const total = await Poll.countDocuments();
+    const search = req.query.search || "";
+    const filter = req.query.filter || "latest";
 
-    const polls = await Poll.find()
-      .sort({ createdAt: -1 })
+    let query = {};
+
+    if (search) {
+      query.question = { $regex: search, $options: "i" };
+    }
+
+    let sortOption = { createdAt: -1 };
+
+    if (filter === "oldest") sortOption = { createdAt: 1 };
+    if (filter === "mostVotes") sortOption = { "options.votes": -1 };
+
+    const polls = await Poll.find(query)
+      .sort(sortOption)
       .skip(skip)
       .limit(limit)
       .lean();
 
     let userId = null;
 
-    // ✅ extract user if token exists
+    // extract user if token exists
     const token = req.headers.authorization?.split(" ")[1];
     if (token) {
       try {
@@ -79,7 +66,7 @@ router.get("/", async (req, res) => {
       } catch {}
     }
 
-    // ✅ attach userVote to each poll
+    // attach userVote to each poll
     let votes = [];
     if (userId) {
       votes = await Vote.find({ user: userId }).lean();
@@ -113,7 +100,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// ✅ VOTE
+// VOTE
 router.post("/vote", auth, async (req, res) => {
   const { pollId, optionIndex } = req.body;
 
@@ -152,7 +139,7 @@ router.post("/vote", auth, async (req, res) => {
   }
 });
 
-// ✅ UPDATE POLL
+// UPDATE POLL
 router.put("/:id", auth, async (req, res) => {
   const { question, options } = req.body;
 
@@ -184,7 +171,7 @@ router.put("/:id", auth, async (req, res) => {
   }
 });
 
-// ✅ DELETE POLL
+// DELETE POLL
 router.delete("/:id", auth, async (req, res) => {
   try {
     const poll = await Poll.findById(req.params.id);

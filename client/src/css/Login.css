@@ -1,9 +1,7 @@
-/* Reset */
 .auth-wrapper * {
   box-sizing: border-box;
 }
 
-/* Wrapper */
 .auth-wrapper {
   position: relative;
   height: 100vh;
@@ -19,7 +17,6 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* 🔥 Fade overlay */
 .auth-wrapper::before {
   content: "";
   position: absolute;
@@ -28,7 +25,6 @@
   z-index: 0;
 }
 
-/* Card (Glass effect) */
 .auth-card {
   position: relative;
   z-index: 1;
@@ -47,7 +43,6 @@
   color: white;
 }
 
-/* Heading */
 .auth-card h2 {
   margin-bottom: 4px;
   font-size: 22px;
@@ -55,14 +50,12 @@
   color: #ffffff;
 }
 
-/* Subtitle */
 .subtitle {
   font-size: 13px;
   color: #d1d5db;
   margin-bottom: 22px;
 }
 
-/* Labels */
 .auth-card label {
   font-size: 13px;
   color: #e5e7eb;
@@ -70,7 +63,6 @@
   display: block;
 }
 
-/* Inputs (glass style) */
 .auth-card input {
   width: 100%;
   padding: 11px 12px;
@@ -85,31 +77,26 @@
   transition: all 0.2s ease;
 }
 
-/* Placeholder */
 .auth-card input::placeholder {
   color: #e5e7eb;
 }
 
-/* Focus */
 .auth-card input:focus {
   border-color: rgb(140, 132, 132);
   outline: none;
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
 }
 
-/* Password wrapper */
 .password-wrapper {
   position: relative;
   width: 100%;
 }
 
-/* Fix spacing */
 .password-wrapper input {
   margin-bottom: 0;
   padding-right: 42px;
 }
 
-/* Eye icon (perfect center) */
 .toggle-eye {
   position: absolute;
   right: 12px;
@@ -124,7 +111,6 @@
   color: #d1d5db;
 }
 
-/* Button */
 .auth-card button {
   margin-top: 20px;
   padding: 12px;
@@ -149,7 +135,6 @@
   cursor: not-allowed;
 }
 
-/* Bottom text */
 .switch-text {
   margin-top: 18px;
   font-size: 13px;
@@ -166,7 +151,7 @@
 .switch-text span:hover {
   text-decoration: underline;
 }
-/* 🔥 Fix white margins */
+
 html,
 body,
 #root {

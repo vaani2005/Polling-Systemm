@@ -11,11 +11,6 @@ import PollPage from "./pages/PollPage";
 import "./css/Header.css";
 import "./css/Footer.css";
 export default function App() {
-  // const ProtectedRoute = ({ children }) => {
-  //   const token = localStorage.getItem("token");
-  //   return token ? children : <Navigate to="/login" />;
-  // };
-
   const ProtectedRoute = ({ children }) => {
     const token = localStorage.getItem("token");
 

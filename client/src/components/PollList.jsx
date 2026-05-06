@@ -9,7 +9,8 @@ export default function PollList() {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("latest");
   const navigate = useNavigate();
   const token = getToken();
 
@@ -30,7 +31,7 @@ export default function PollList() {
       setLoading(true);
 
       const res = await fetch(
-        `http://localhost:5000/poll?page=${pageNum}&limit=5`,
+        `http://localhost:5000/poll?page=${pageNum}&limit=5&search=${search}&filter=${filter}`,
       );
       const data = await res.json();
 
@@ -46,10 +47,9 @@ export default function PollList() {
     }
   };
 
-  // LOAD ONCE
   useEffect(() => {
     fetchPolls(1);
-  }, []);
+  }, [search, filter]);
 
   // VOTE
   const vote = async (pollId, optionIndex) => {
@@ -60,8 +60,6 @@ export default function PollList() {
         pollId,
         optionIndex,
       });
-
-      // update UI instantly
       setVoted((prev) => ({ ...prev, [pollId]: optionIndex }));
 
       fetchPolls(page);
@@ -88,17 +86,24 @@ export default function PollList() {
     }
   };
 
-  // LOADING UI
-  if (loading) {
-    return <p className="center-text">Loading polls...</p>;
-  }
-
   return (
     <div className="poll-container">
       <h2>Live Polls</h2>
 
-      {polls.length === 0 && <p className="center-text">No polls available</p>}
+      <div className="top-bar">
+        <input
+          type="text"
+          placeholder="Search polls..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
+        <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+          <option value="latest">Latest</option>
+          <option value="oldest">Oldest</option>
+          <option value="mostVotes">Most Votes</option>
+        </select>
+      </div>
       {polls.map((p) => (
         <div className="poll-card" key={p._id}>
           <div className="poll-header">
@@ -158,7 +163,6 @@ export default function PollList() {
         </div>
       ))}
 
-      {/* PAGINATION */}
       <div className="pagination">
         <button disabled={page === 1} onClick={() => fetchPolls(page - 1)}>
           Prev

@@ -1,5 +1,5 @@
 // frontent live : https://polling-systemm-client1.onrender.com
-// backend live : https://polling-system-backend-v4n5.onrender.com
+// backend live : https://polling-systemm-server.onrender.com
 // local host : http://localhost:5000
 import Swal from "sweetalert2";
 
@@ -26,8 +26,6 @@ export const request = async (url, method = "GET", body) => {
     } catch {
       data = {};
     }
-
-    // 🔐 Unauthorized
     if (res.status === 401) {
       localStorage.removeItem("token");
 
@@ -48,8 +46,6 @@ export const request = async (url, method = "GET", body) => {
       window.location.replace("/login");
       return null;
     }
-
-    // ❌ Other errors
     if (!res.ok) {
       Swal.fire({
         icon: "error",
@@ -58,7 +54,6 @@ export const request = async (url, method = "GET", body) => {
       return null;
     }
 
-    // ✅ Success (non-GET)
     if (method !== "GET" && data.msg) {
       Swal.fire({
         icon: "success",

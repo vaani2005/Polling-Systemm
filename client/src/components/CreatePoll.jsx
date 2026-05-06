@@ -41,7 +41,7 @@ export default function CreatePoll() {
   const submit = async () => {
     const clean = options.map((o) => o.trim()).filter((o) => o);
 
-    // ❌ Validation
+    // Validation
     if (!question || clean.length < 2) {
       return Swal.fire({
         icon: "error",
@@ -70,7 +70,7 @@ export default function CreatePoll() {
         });
       }
 
-      // ✅ Success alert
+      // Success alert
       await Swal.fire({
         icon: "success",
         text: id ? "Poll updated successfully" : "Poll created successfully",
