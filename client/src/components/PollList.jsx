@@ -31,7 +31,7 @@ export default function PollList() {
       setLoading(true);
 
       const res = await fetch(
-        `https://polling-systemm-client1.onrender.com/polls?page=${pageNum}&limit=5&search=${search}&filter=${filter}`,
+        `http://localhost:5000/poll?page=${pageNum}&limit=5&search=${search}&filter=${filter}`,
       );
       const data = await res.json();
 
