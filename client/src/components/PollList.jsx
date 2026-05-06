@@ -7,6 +7,8 @@ export default function PollList() {
   const [polls, setPolls] = useState([]);
   const [voted, setVoted] = useState({});
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const navigate = useNavigate();
   const token = getToken();
@@ -21,82 +23,72 @@ export default function PollList() {
   } catch {
     userId = null;
   }
-  const fetchPolls = async () => {
+
+  // FETCH POLLS
+  const fetchPolls = async (pageNum = 1) => {
     try {
-      const data = await request("/poll");
-      if (!data) return;
+      setLoading(true);
 
-      setPolls(data);
+      const res = await fetch(
+        `http://localhost:5000/poll?page=${pageNum}&limit=5`,
+      );
+      const data = await res.json();
 
-      const voteState = {};
-      data.forEach((p) => {
-        if (p.userVote !== null && p.options[p.userVote]) {
-          voteState[p._id] = p.userVote;
-        }
-      });
-
-      setVoted(voteState);
+      setPolls(data?.polls || []);
+      setPage(data?.page || 1);
+      setTotalPages(data?.totalPages || 1);
     } catch (err) {
-      Swal.fire({
-        icon: "error",
-        text: "Failed to load polls",
-      });
+      console.log(err);
+      setPolls([]);
+      Swal.fire("Error", "Failed to load polls", "error");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async (pollId) => {
+  // LOAD ONCE
+  useEffect(() => {
+    fetchPolls(1);
+  }, []);
+
+  // VOTE
+  const vote = async (pollId, optionIndex) => {
     if (!token) return navigate("/login");
 
+    try {
+      await request("/poll/vote", "POST", {
+        pollId,
+        optionIndex,
+      });
+
+      // update UI instantly
+      setVoted((prev) => ({ ...prev, [pollId]: optionIndex }));
+
+      fetchPolls(page);
+    } catch (err) {
+      Swal.fire("Error", "Voting failed", "error");
+    }
+  };
+
+  // DELETE
+  const handleDelete = async (pollId) => {
     const result = await Swal.fire({
       title: "Are you sure?",
-      text: "This poll will be deleted permanently",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes, delete it",
     });
 
     if (!result.isConfirmed) return;
 
-    const res = await request(`/poll/${pollId}`, "DELETE");
-    if (!res) return;
-
-    Swal.fire({
-      icon: "success",
-      text: res.msg || "Poll deleted",
-      timer: 1200,
-      showConfirmButton: false,
-    });
-
-    fetchPolls();
+    try {
+      await request(`/poll/${pollId}`, "DELETE");
+      fetchPolls(page);
+    } catch (err) {
+      Swal.fire("Error", "Delete failed", "error");
+    }
   };
 
-  const vote = async (pollId, optionIndex) => {
-    if (!token) return navigate("/login");
-
-    const res = await request("/poll/vote", "POST", {
-      pollId,
-      optionIndex,
-    });
-
-    if (!res) return;
-
-    Swal.fire({
-      icon: "success",
-      text: "Vote submitted",
-      timer: 1000,
-      showConfirmButton: false,
-    });
-
-    fetchPolls();
-  };
-
-  useEffect(() => {
-    fetchPolls();
-  }, []);
-
-  // ⏳ Loading state
+  // LOADING UI
   if (loading) {
     return <p className="center-text">Loading polls...</p>;
   }
@@ -136,7 +128,7 @@ export default function PollList() {
               <div className="option-row" key={i}>
                 <div className="option-text">
                   {opt.text}
-                  <span className="votes">({opt.votes})</span>
+                  <span className="votes"> ({opt.votes})</span>
                 </div>
 
                 {!token ? (
@@ -147,8 +139,17 @@ export default function PollList() {
                     Login to Vote
                   </button>
                 ) : (
-                  <button className="vote-btn" onClick={() => vote(p._id, i)}>
-                    {voted[p._id] === i ? "Selected" : "Vote"}
+                  <button
+                    className={`vote-btn $
+                      {voted[p._id] === i ? "selected" : ""} 
+                    ${!token ? "login" : ""}`}
+                    onClick={() => vote(p._id, i)}
+                  >
+                    {!token
+                      ? "Login to Vote"
+                      : voted[p._id] === i
+                        ? "Selected"
+                        : "Vote"}
                   </button>
                 )}
               </div>
@@ -156,6 +157,24 @@ export default function PollList() {
           </div>
         </div>
       ))}
+
+      {/* PAGINATION */}
+      <div className="pagination">
+        <button disabled={page === 1} onClick={() => fetchPolls(page - 1)}>
+          Prev
+        </button>
+
+        <span className="page-info">
+          Page {page} of {totalPages}
+        </span>
+
+        <button
+          disabled={page === totalPages}
+          onClick={() => fetchPolls(page + 1)}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 }

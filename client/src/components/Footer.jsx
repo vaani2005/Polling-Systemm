@@ -13,7 +13,6 @@ export default function Footer() {
 
       {/* CENTER */}
       <div className="footer-links">
-        <span onClick={() => navigate("/polls")}>Home</span>
         <span onClick={() => navigate("/create")}>Create Poll</span>
         <span onClick={() => navigate("/login")}>Login</span>
       </div>

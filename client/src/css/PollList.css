@@ -16,12 +16,11 @@ body {
   content: "";
   position: fixed;
   inset: 0;
-
   background-image: url("/bg.jpg");
   background-size: cover;
   background-position: center;
 
-  filter: brightness(0.7) blur(2px);
+  filter: brightness(0.85) blur(3px);
   z-index: -2;
 }
 
@@ -65,23 +64,6 @@ button {
   transition: all 0.25s ease;
 }
 
-.create-btn {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
-  backdrop-filter: blur(6px);
-}
-.create-btn:hover {
-  background: rgba(255, 255, 255, 0.35);
-}
-
-.logout-btn {
-  background: rgba(239, 68, 68, 0.7);
-  color: white;
-}
-.logout-btn:hover {
-  background: rgba(239, 68, 68, 1);
-}
-
 .poll-card {
   max-width: 720px;
   margin: 0 auto 20px;
@@ -90,13 +72,14 @@ button {
 
   background: rgba(255, 255, 255, 0.12);
   backdrop-filter: blur(14px);
-
+  border: 1px solid rgba(255, 255, 255, 0.15); /* NEW */
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
   transition: all 0.25s ease;
 }
 
 .poll-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
 }
 
 .poll-header {
@@ -199,4 +182,58 @@ button {
 .actions {
   display: flex;
   gap: 10px;
+}
+/* Pagination wrapper */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+
+  margin-top: 30px;
+}
+
+/* Page text */
+.pagination span {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Buttons */
+.pagination button {
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: none;
+
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  cursor: pointer;
+  transition: all 0.25s ease;
+
+  backdrop-filter: blur(10px);
+}
+
+/* Hover */
+.pagination button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.35);
+  transform: translateY(-2px);
+}
+
+/* Disabled state */
+.pagination button:disabled {
+  background: rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Active feel (optional improvement) */
+.pagination button:active {
+  transform: scale(0.95);
 }
