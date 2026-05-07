@@ -34,7 +34,7 @@ router.get("/", async (req, res) => {
     const limit = parseInt(req.query.limit) || 5;
     const skip = (page - 1) * limit;
 
-    const total = await Poll.countDocuments();
+    const total = await Poll.countDocuments(query);
     const search = req.query.search || "";
     const filter = req.query.filter || "latest";
 
