@@ -27,32 +27,50 @@ export default function PollList() {
     userId = null;
   }
 
+  // const fetchPolls = async (pageNum = 1) => {
+  //   try {
+  //     setLoading(true);
+
+  //     const res = await fetch(
+  //       `${base_url}/poll?page=${pageNum}&limit=5&search=${search}&filter=${filter}`,
+
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       },
+  //     );
+
+  //     const data = await res.json();
+
+  //     setPolls(data?.polls || []);
+  //     setPage(data?.page || 1);
+  //     setTotalPages(data?.totalPages || 1);
+  //   } catch (err) {
+  //     Swal.fire("Error", "Failed to load polls", "error");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   const fetchPolls = async (pageNum = 1) => {
     try {
       setLoading(true);
 
-      const res = await fetch(
-        `${base_url}/poll?page=${pageNum}&limit=5&search=${search}&filter=${filter}`,
-
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
+      const data = await request(
+        `/poll?page=${pageNum}&limit=5&search=${search}&filter=${filter}`,
       );
 
-      const data = await res.json();
+      if (!data) return;
 
       setPolls(data?.polls || []);
       setPage(data?.page || 1);
       setTotalPages(data?.totalPages || 1);
     } catch (err) {
-      Swal.fire("Error", "Failed to load polls", "error");
+      console.log(err);
     } finally {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchPolls(1);
   }, [search, filter]);
@@ -92,7 +110,11 @@ export default function PollList() {
     }
   };
   if (loading) {
-    return <p className="center-text">Loading polls...</p>;
+    return (
+      <div className="loader-container">
+        <div className="loader"></div>
+      </div>
+    );
   }
   return (
     <div className="poll-container">
