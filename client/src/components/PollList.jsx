@@ -30,8 +30,7 @@ export default function PollList() {
       setLoading(true);
 
       const res = await fetch(
-        // `http://localhost:5000/poll?page=${pageNum}&limit=5&search=${search}&filter=${filter}`,
-        `https://your-backend.onrender.com/poll?page=${pageNum}&limit=5&search=${search}&filter=${filter}`,
+        `http://localhost:5000/poll?page=${pageNum}&limit=5&search=${search}&filter=${filter}`,
 
         {
           headers: {
