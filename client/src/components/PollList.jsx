@@ -25,22 +25,25 @@ export default function PollList() {
     userId = null;
   }
 
-  // FETCH POLLS
   const fetchPolls = async (pageNum = 1) => {
     try {
       setLoading(true);
 
       const res = await fetch(
         `http://localhost:5000/poll?page=${pageNum}&limit=5&search=${search}&filter=${filter}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
+
       const data = await res.json();
 
       setPolls(data?.polls || []);
       setPage(data?.page || 1);
       setTotalPages(data?.totalPages || 1);
     } catch (err) {
-      console.log(err);
-      setPolls([]);
       Swal.fire("Error", "Failed to load polls", "error");
     } finally {
       setLoading(false);
