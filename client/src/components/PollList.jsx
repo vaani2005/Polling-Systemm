@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { request, getToken } from "../api";
 import Swal from "sweetalert2";
 
+const base_url = import.meta.env.VITE_BACKEND_URL;
+
 export default function PollList() {
   const [polls, setPolls] = useState([]);
   const [voted, setVoted] = useState({});
@@ -30,7 +32,7 @@ export default function PollList() {
       setLoading(true);
 
       const res = await fetch(
-        `https://polling-systemm-client1.onrender.com/poll?page=${pageNum}&limit=5&search=${search}&filter=${filter}`,
+        `${base_url}/poll?page=${pageNum}&limit=5&search=${search}&filter=${filter}`,
 
         {
           headers: {

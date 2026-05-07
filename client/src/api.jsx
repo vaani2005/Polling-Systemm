@@ -5,13 +5,13 @@ import Swal from "sweetalert2";
 
 export const getToken = () => localStorage.getItem("token");
 
-const BASE_URL = "https://polling-systemm-server.onrender.com";
+const base_url = import.meta.env.VITE_BACKEND_URL;
 
 export const request = async (url, method = "GET", body) => {
   try {
     const token = getToken();
 
-    const res = await fetch(BASE_URL + url, {
+    const res = await fetch(base_url + url, {
       method,
       headers: {
         "Content-Type": "application/json",
