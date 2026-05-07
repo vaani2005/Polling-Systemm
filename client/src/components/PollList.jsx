@@ -91,10 +91,13 @@ export default function PollList() {
       Swal.fire("Error", "Delete failed", "error");
     }
   };
-
+  if (loading) {
+    return <p className="center-text">Loading polls...</p>;
+  }
   return (
     <div className="poll-container">
       <h2>Live Polls</h2>
+      {polls.length === 0 && <p className="center-text">No polls available</p>}
 
       <div className="top-bar">
         <input
@@ -152,7 +155,7 @@ export default function PollList() {
                 ) : (
                   <button
                     className={`vote-btn $
-                      {voted[p._id] === i ? "selected" : ""} 
+                      {voted[p._id] === i ? "selected" : ""}
                     ${!token ? "login" : ""}`}
                     onClick={() => vote(p._id, i)}
                   >
