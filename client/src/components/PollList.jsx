@@ -154,9 +154,9 @@ export default function PollList() {
                   </button>
                 ) : (
                   <button
-                    className={`vote-btn $
-                      {voted[p._id] === i ? "selected" : ""}
-                    ${!token ? "login" : ""}`}
+                    className={`vote-btn ${
+                      voted[p._id] === i ? "selected" : ""
+                    } ${!token ? "login" : ""}`}
                     onClick={() => vote(p._id, i)}
                   >
                     {!token
