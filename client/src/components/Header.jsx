@@ -32,9 +32,9 @@ export default function Header() {
   return (
     <nav className="navbar">
       {/* LEFT */}
-      <div className="logo" onClick={() => navigate("/polls")}>
+      {/* <div className="logo" onClick={() => navigate("/polls")}>
         <img src="/logo.webp" alt="Logo" />
-      </div>
+      </div> */}
 
       {/* RIGHT */}
       <div className="nav-actions">
